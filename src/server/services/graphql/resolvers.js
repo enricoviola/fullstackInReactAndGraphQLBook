@@ -19,9 +19,13 @@ let posts = [{
 
 const resolvers = {
     RootQuery: {
-        posts(root, args, context) {
+        /*posts(root, args, context) {
             return posts; 
-        }, 
+        },*/ 
+
+        posts(root, args, context) {
+            return Post.findAll( { order: [['createdAt', 'DESC']] } );
+        }
     },
     RootMutation: {
         addPost(root, { post, user }, context) {
@@ -35,6 +39,11 @@ const resolvers = {
           return postObject;
         },
     }
-}; 
-  
-export default resolvers;
+};
+
+export default function resolver() {
+    const { db } = this;
+    const { Post } = db.models;
+
+    return resolvers;
+}
